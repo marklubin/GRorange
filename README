@@ -1,0 +1,3 @@
+GRoarange is an application that works with Growl and the Reddit API in Mac OSX to provide system notifcations when you get a new message. 
+
+Please use conf file to specify your username, password and the delay you wish to use in how often you check reddit(in seconds), only times of 10s> are accepted.
