@@ -17,20 +17,27 @@ def main():
   import terminal
   import growl
   import errors
+  import strings
   
   #initialize vars
   isTerminal = True
   isConfigFile = True
   isDebug = False
+  isGUI = False
+  useGrowl = True
   lang = 'EN'
   delay = 10
   timeoutlimit = 5
+  timeout = 0
   redditUsers = []
   notificationReceivers = []
+  gui = None
   
-  #initialize language and import correct strings
-  if lang == 'EN':
-    exec("import strings")
+  """implement code to support multiple languages
+    if lang == 'EN':
+  """
+
+    
     
   
   """
@@ -49,17 +56,31 @@ def main():
       isConfigFile = True
     elif arg == '-d':
       isDebug = True
+    elif arg == '-i':
+      isGUI = True
+    elif arg == '-g':
+      useGrowl = True
       
   if isDebug: print """Running with:
   isDebug = %s
   isTerm = %s
   isConfigFile %s \n""" % (isDebug,isTerminal,isConfigFile)
   
-  if isTerminal: print strings.welcome
+  if isTerminal: 
+    print strings.welcome
+    notificationReceivers.append(terminal.Terminal())
+    if isDebug: print "Initialized terminal as Notification Receiver"
+  
+  if isGUI:
+    #initialize Tkinter gui for User Configuration
+    pass
+  if useGrowl:
+    notificationReceivers.append(growl.Growl())
     
   if isConfigFile:
     import conf
-    delay = conf.delay
+    #add code to check these values
+    delay = conf.delay 
     timeoutlimit = conf.timeoutlimit
     if isDebug: 
       print "Delay set to %i by conf.py" % delay
@@ -78,15 +99,8 @@ def main():
   if isDebug: 
     for user in redditUsers:
       print "Added user account for: %s" % user.getUsername()
-      
-      
-  #initialize IO object GROWL/CMDLINE/ETC
-  if isTerminal:
-    notificationReceivers.append(terminal.Terminal())
-    if isDebug: print "Initialized terminal as Notification Receiver"
   
   #main loop for message checking
-  timeout = 0
   if not len(redditUsers):
     print strings.nousers
     sys.exit()
