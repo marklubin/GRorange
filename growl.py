@@ -26,7 +26,7 @@ class Growl(Notification):
         noteType = "New Messages",
         title = strings.userAgent,
         description = strings.newMsgNot % (user,n),
-       # icon = r'file:///Users/mark/GRorange/oranged.png',
+        icon = r"http://upload.wikimedia.org/wikipedia/fr/f/fc/Reddit-alien.png",
         sticky = False,
         priority = 1,
     )
