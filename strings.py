@@ -11,3 +11,8 @@ welcome = u"""\n\n\n\nWelcome to GRoange, the Reddit Notification Manager for OS
 ----------------------------------------------------------------------"""
 newMsgNot = "%s has new %i messages on Reddit."
 cantLogin = "Can't login to %s, because: %s" 
+redditUnavail = "Cannot connect to reddit."
+timeoutclose = "I can't seem to reach reddit now, try again later."
+timeoutretry = "Couldn't reach reddit %i retries left."
+nousers = 'Sorry, I cannot connect any of your accounts to Reddit. Closing...'
+

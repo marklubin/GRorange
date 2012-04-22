@@ -24,6 +24,7 @@ def main():
   isDebug = False
   lang = 'EN'
   delay = 10
+  timeoutlimit = 5
   redditUsers = []
   notificationReceivers = []
   
@@ -59,7 +60,11 @@ def main():
   if isConfigFile:
     import conf
     delay = conf.delay
-    if isDebug: print "Delay set to %i by conf.py" % delay
+    timeoutlimit = conf.timeoutlimit
+    if isDebug: 
+      print "Delay set to %i by conf.py" % delay
+      print "Timeout limit set to %i by conf.py" % timeoutlimit
+    
     for x in conf.users:
       #construct new user and append to redditUsers
       if isDebug: print "Trying to login: %s" % x['username']
@@ -81,10 +86,25 @@ def main():
     if isDebug: print "Initialized terminal as Notification Receiver"
   
   #main loop for message checking
+  timeout = 0
+  if not len(redditUsers):
+    print strings.nousers
+    sys.exit()
   while True:
     for user in redditUsers:
       if isDebug: print "Checking messages for %s" % user.getUsername()
-      num = user.hasNewMsgs()
+      try:
+        num = user.hasNewMsgs()
+      except errors.GRorangeCantConnectToReddit as e:
+        timeout += 1
+        if timeout == timeoutlimit:
+          print strings.timeoutclose
+          sys.exit()
+        else:
+          print strings.timeoutretry % (timeoutlimit-timeout)
+      else:
+        timeout = 0
+        
       if num:
         for notifier in notificationReceivers:
           notifier.notify(user.getUsername(),num)

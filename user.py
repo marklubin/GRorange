@@ -43,7 +43,11 @@ class User:
     return self.__username
   
   def hasNewMsgs(self):
-    self.__newMsgCnt = len(list(self.__red.user.get_unread(limit=None)))
+    try:
+      self.__newMsgCnt = len(list(self.__red.user.get_unread(limit=None)))
+    except errors.urllib2.URLError as e:
+      raise errors.GRorangeCantConnectToReddit(str(e))
+      
     #print "Found %i messages." % self.__newMsgCnt
     #print "Have reported %i messages" % self.__msgsReported
     if self.__newMsgCnt > self.__msgsReported:
